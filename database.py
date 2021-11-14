@@ -16,25 +16,25 @@ class Database:
         self.c.commit()
 
     def search(self, letter):
-        cur = self.c.cursor()
-        database_content = self.__collect_letters()
+        database_content = self.collect_letters()
 
         if letter in database_content:
             return True
         else:
             return False
 
-    def __collect_letters(self):
+    def collect_letters(self):
         cur = self.c.cursor()
         cur.execute('''SELECT letter FROM letters''')
         result = cur.fetchall()
 
-        overwritted_content = []
+        self.overwritted_content = []
         for row in result:
-            overwritted_content.append(row[0])
+            self.overwritted_content.append(row[0])
         self.c.commit()
 
-        return overwritted_content
+        return self.overwritted_content
+
 
     def show_content(self):
         cur = self.c.cursor()
@@ -56,8 +56,11 @@ class Database:
     def del_content(self, letter):
         cur = self.c.cursor()
         cur.execute('''DELETE FROM letters WHERE 
-                          letter = ?''', (letter)).rowcount
-        
+                          letter = ?''', (letter))
         self.c.commit()
 
+# database = Database()
 
+# print(database.collect_letters())
+# print(database.search('b'))
+# print(database.show_content())
