@@ -47,6 +47,7 @@ while True:
             3. Show letters
             4. Wyjdź''')
 
+
     user_choice = int(input('Enter your choice: '))
 
     while user_choice != 0:
