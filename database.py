@@ -3,13 +3,13 @@ import sqlite3 as sq
 class Database:
     def __init__(self):
         self.c = sq.connect('letters.db') # Create database
-
         try:
-            self.__create_table()
+            self.__createTable()
+
         except:
             print(f'Table already created')
 
-    def __create_table(self):
+    def __createTable(self):
         cur = self.c.cursor()
         cur.execute('''CREATE TABLE letters(
                        letter TEXT)''')
@@ -17,26 +17,17 @@ class Database:
 
     def search(self, letter):
         database_content = self.collect_letters()
+        return letter in database_content
 
-        if letter in database_content:
-            return True
-        else:
-            return False
-
-    def collect_letters(self):
+    def collectLetters(self):
         cur = self.c.cursor()
         cur.execute('''SELECT letter FROM letters''')
         result = cur.fetchall()
-
-        self.overwritted_content = []
-        for row in result:
-            self.overwritted_content.append(row[0])
         self.c.commit()
+        return [row[0] for row in result]
 
-        return self.overwritted_content
 
-
-    def show_content(self):
+    def showContent(self):
         cur = self.c.cursor()
         cur.execute('''SELECT letter FROM letters''')
         result = cur.fetchall()
@@ -46,14 +37,14 @@ class Database:
 
         self.c.commit()
                 
-    def addcontent(self, letter):
+    def addContent(self, letter):
         cur = self.c.cursor()
         letter_record = letter
         cur.execute(f'''INSERT INTO letters(letter)
                         VALUES(?)''', (letter_record))
         self.c.commit()
 
-    def del_content(self, letter):
+    def deleteContent(self, letter):
         cur = self.c.cursor()
         cur.execute('''DELETE FROM letters WHERE 
                           letter = ?''', (letter))
@@ -64,3 +55,4 @@ class Database:
 # print(database.collect_letters())
 # print(database.search('b'))
 # print(database.show_content())
+#!/bin/python3
