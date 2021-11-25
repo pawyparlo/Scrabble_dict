@@ -8,7 +8,7 @@ This code is written in reason to
 compare dictionary words to given letters, same
 like in Scrabble game. 
 
-#For now, 
+# For now, 
 I want to create:
 
 1/ Database like SQLite to contain
