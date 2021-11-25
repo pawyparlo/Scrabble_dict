@@ -1,5 +1,4 @@
 from database import Database
-import random
 
 
 class DataContainer(Database):
@@ -7,15 +6,12 @@ class DataContainer(Database):
         super().__init__()
         self.filename = filename
         self.file = open(self.filename, 'r')
-        self.permutation_list = []
+        self.__readContent()
+        self.permutation_list = [] # list of permutations as list of strings
 
     def __readContent(self):
         self.content = self.file.read()
-        self.content = self.content.splitlines()
-
-    # def listContainer(self):
-    #     self.list = []
-    #     return self.list
+        #self.content = self.content.splitlines()
 
     def listPermutation(self, a, size):
         '''Based on Heap's permutation'''
@@ -32,30 +28,68 @@ class DataContainer(Database):
             else:
                 a[i], a[size-1] = a[size-1], a[i]
 
+    def listPop(self):
 
-    def listPop(self, n):
-        '''Pick up n random letters from list'''
-        assert n >= 2, f'Number of letters can\'t be smaller than 2'
-        current_list = self.collectLetters()
-        random.shuffle(current_list)
+        if len(self.collectLetters()) < 3:
 
-        if len(current_list) >= 2:
-            for i in range(n):
-                try:
-                    current_list.pop()
-                except:
-                    print(f'List is empty!, list state {current_list}')
-            return current_list
+            self.listPermutation(self.collectLetters(), len(self.collectLetters()))
+
+            for permutations in self.permutation_list:
+                word = self.__createWord(permutations)
+
+                for words in self.content.splitlines():
+                    if word == words:
+                        print(words)
+
+        elif len(self.collectLetters()) >= 3:
+            
+            letters = self.collectLetters()
+
+            while len(letters) != 0:
+
+                self.listPermutation(letters, len(letters))
+
+                for permutations in self.permutation_list:
+                    word = self.__createWord(permutations)
+
+                    for words in self.content.splitlines():
+                        if word == words:
+                            print(words)
+
+                letters.pop()
+                self.permutation_list.clear()   
+
+                letters = self.__removeLetter(letters)                          
+
+    def __createWord(self, permutation):
+        word = ''
+
+        for letter in permutation:
+            if letter.isalpha():
+                word += letter
+
+        return word
+
+    def __removeLetter(self, letters):
+        
+        if len(letters) < 1:
+            return []
 
         else:
-            print(f'Min. list items is 2, current nr of items {len(current_list)}')
-            return
-    
-    def createWord(self, letter_list):
-        return ''.join(letter_list)
+            try:
+                for i in range(0,len(letters)):
+                    if i == 0:
+                        return letters[i + 1:len(letters)]
+                        
+                    elif i != len(letters) - 1:
+                        return letters[0:i] + letters[i + 1:len(letters)]
 
-    def printResult(self):
-        return [word for word in self.collectLetters()]
+                    else:
+                        return letters[0:i]  
 
+            except IndexError:
+                pass
+
+  
 
 

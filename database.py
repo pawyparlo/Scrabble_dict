@@ -1,5 +1,6 @@
 import sqlite3 as sq
 
+
 class Database:
     def __init__(self):
         self.c = sq.connect('letters.db') # Create database
@@ -16,7 +17,7 @@ class Database:
         self.c.commit()
 
     def search(self, letter):
-        database_content = self.collect_letters()
+        database_content = self.collectLetters()
         return letter in database_content
 
     def collectLetters(self):
@@ -25,7 +26,6 @@ class Database:
         result = cur.fetchall()
         self.c.commit()
         return [row[0] for row in result]
-
 
     def showContent(self):
         cur = self.c.cursor()
@@ -50,9 +50,3 @@ class Database:
                           letter = ?''', (letter))
         self.c.commit()
 
-# database = Database()
-
-# print(database.collect_letters())
-# print(database.search('b'))
-# print(database.show_content())
-#!/bin/python3

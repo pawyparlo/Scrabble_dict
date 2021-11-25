@@ -35,6 +35,9 @@ class DataProcessingTests(DataContainer):
     def tryPrintletters(self):
         return self.collectLetters()
 
+    def main_function(self):
+        return self.listPop()
+
     def __repr__(self):
         return 
 
@@ -49,9 +52,3 @@ class DataBaseTests(Database):
             return True
         else:
             return False
-
-
-
-tests = DataProcessingTests()
-# tests.tryPrintpermutations()
-print(tests.tryTopermuteList())
