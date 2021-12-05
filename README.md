@@ -19,3 +19,5 @@ matching words,
 
 3/ While I will be coding this idea i want practise:
 OOP principles, algorithms, clean code principles
+
+Finally i want to retake this to django application.
