@@ -1,4 +1,5 @@
 from database import Database
+from string import ascii_lowercase
 
 
 class DataContainer(Database):
@@ -35,9 +36,10 @@ class DataContainer(Database):
             self.listPermutation(self.collectLetters(), len(self.collectLetters()))
 
             for permutations in self.permutation_list:
-                word = self.__createWord(permutations)
+                word = self.createWord(permutations)
 
                 for words in self.content.splitlines():
+
                     if word == words:
                         print(words)
 
@@ -50,18 +52,43 @@ class DataContainer(Database):
                 self.listPermutation(letters, len(letters))
 
                 for permutations in self.permutation_list:
-                    word = self.__createWord(permutations)
+                    word = self.createWord(permutations)
 
                     for words in self.content.splitlines():
+
                         if word == words:
                             print(words)
 
                 letters.pop()
                 self.permutation_list.clear()   
 
-                letters = self.__removeLetter(letters)                          
+                letters = self.removeLetter(letters)      
 
-    def __createWord(self, permutation):
+    def binarySearch(self, word):
+        
+        self.book = self.content.splitlines() # List of words to iterate
+        self.alphabet = list(ascii_lowercase)
+
+        start = 0
+        end = len(self.book) - 1
+
+        while start <= end:
+
+            middle = (start + end)// 2
+            midpoint = self.book[middle]
+            
+            if self.alphabet.index(midpoint[0]) > self.alphabet.index(word[0]):
+                end = middle - 1
+                
+            elif self.alphabet.index(midpoint[0]) < self.alphabet.index(word[0]):
+                start = middle + 1
+                
+            elif midpoint[0] == word[0]:
+                return self.book.index(midpoint)
+
+
+
+    def createWord(self, permutation):
         word = ''
 
         for letter in permutation:
@@ -70,13 +97,15 @@ class DataContainer(Database):
 
         return word
 
-    def __removeLetter(self, letters):
+    def removeLetter(self, letters):
         
         if len(letters) < 1:
             return []
 
         else:
+
             try:
+
                 for i in range(0,len(letters)):
                     if i == 0:
                         return letters[i + 1:len(letters)]

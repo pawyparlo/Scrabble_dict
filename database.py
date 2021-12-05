@@ -6,9 +6,8 @@ class Database:
         self.c = sq.connect('letters.db') # Create database
         try:
             self.__createTable()
-
         except:
-            print(f'Table already created')
+            pass
 
     def __createTable(self):
         cur = self.c.cursor()
