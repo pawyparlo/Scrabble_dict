@@ -33,7 +33,6 @@ class Database:
 
         for row in result:
             print(f'Current letters {row[0]}')
-
         self.c.commit()
                 
     def addContent(self, letter):
