@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 from database import Database
+
 import codecs
 
+from itertools import permutations
 
 class DataContainer(Database):
     def __init__(self, filename = 'list_of_words_pl.txt'):
@@ -61,5 +64,13 @@ class DataContainer(Database):
 
             else:
                 a[i], a[size-1] = a[size-1], a[i]
+
+    def itertoolsPermutations(self, a: list):
+        self.permutation_list = [''.join(x) for x in permutations(a)]
+        self.permutation_set = {''.join(x) for x in permutations(a)}
+
+
+
+
 
 

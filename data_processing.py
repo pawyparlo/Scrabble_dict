@@ -1,77 +1,53 @@
 from data_storage import DataContainer
 
+from time import time
+
 
 class DataAlgorithms(DataContainer):
+
+    letters=list('krowat')
+
     def __init__(self):
         super().__init__()
 
-
-    def searchIntoHashMap(self):
-
-        if len(self.collectLetters()) < 3:
-            self.permutationsToList(self.collectLetters(), len(self.collectLetters()))
-
-            for permutations in self.permutation_list:
-
-                for words in self.hashLetters[permutations[0]]:
-                    if permutations == words:
-                        print(words)
-
-        elif len(self.collectLetters()) >= 3:      
-
-            while len(self.collectLetters) != 0:
-                self.permutationsToList(letters, len(letters))
-
-                for permutations in self.permutation_list:
-
-                    for words in self.hashLetters[permutations[0]]:
-                        if permutations == words:
-                            print(words)
-
-                letters.pop()
-                self.permutation_list.clear()   
-                letters = self.removeLetter(letters)  
-
-    def searchIntoSet(self):
-        self.permutationsToSet(self.collectLetters(), len(self.collectLetters()))
-        self.setData()
-
-        print(self.permutation_set)
-        # print(self.setLetters.intersection(self.permutation_set))
+        self.__testTime(self.returnFromHashMap)
+        self.__testTime(self.searchIntoSet)
 
 
-    def removeLetter(self, letters):
+    def searchIntoHashMap(self, letters=letters):
+        self.hashMapData() # Store data from .txt file into Hash Map
+        self.itertoolsPermutations(letters) # Permute letters
+
+        for permutations in self.permutation_list:
+            for words in self.hashLetters[permutations[0]]:
+                if permutations == words:
+                    yield words
+
+    def returnFromHashMap(self):
+        result = list(self.searchIntoHashMap())
+        return result
+
+    def searchIntoSet(self, letters=letters):
+
+        self.itertoolsPermutations(letters) # Permute letters
+        self.setData() # Store .txt data into set
+        result = self.setLetters.intersection(self.permutation_set)
         
-        if len(letters) < 1:
-            return []
+        if len(result) > 0:
+            return result
 
-        else:
 
-            try:
+    # Decorator
+    def __testTime(self, func):
+        start_time = time()
+        print(func())
+        end_time = time()
+        print(f'Algorithm: {func.__name__} \n time: {(end_time-start_time):.8f}')
 
-                for i in range(0,len(letters)):
-                    if i == 0:
-                        return letters[i + 1:len(letters)]
-                        
-                    elif i != len(letters) - 1:
-                        return letters[0:i] + letters[i + 1:len(letters)]
 
-                    else:
-                        return letters[0:i]  
 
-            except IndexError:
-                pass
+Object=DataAlgorithms()
 
-object = DataAlgorithms()
-object.permutationsToSet(list('aou'),len(list('aou')))
-object.setData()
-print(object.permutation_set)
-# print(object.permutation_set.intersection(object.setLetters))
-
-object1 = DataAlgorithms()
-object1.permutationsToList(list('aou'),len(list('aou')))
-object.hashMapData()
-print(object.permutation_list)
 
 
 
