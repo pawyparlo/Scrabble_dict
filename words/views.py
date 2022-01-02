@@ -17,7 +17,7 @@ def letters_input(request):
             cd = form.cleaned_data
             filled = True
 
-            data = open_txt_file(r"C:\Users\PAWWYP\Desktop\literaki\list_of_words_pl.txt")
+            data = open_txt_file("list_of_words_pl.txt")
             result = find_word(data, cd['letters'])
             
             return HttpResponse("{}".format(result))
