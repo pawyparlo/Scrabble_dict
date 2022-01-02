@@ -20,4 +20,8 @@ matching words,
 3/ While I will be coding this idea i want practise:
 OOP principles, algorithms, clean code principles
 
-Finally i want to retake this to django application.
+4/Finally i want to retake this to django application.
+
+Actually: 
+
+Working with Django
