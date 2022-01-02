@@ -1,73 +1,74 @@
 from itertools import permutations
+from collections import defaultdict
+
 from time import time
 
 
-class BestPermutationAlgorithm():
-    word = list('mauelyr')
+class BestPermutationAlgorithm:
 
-    def __init__(self):
-        self.container = []
+    def __init__(self, word):
+        self.container = defaultdict(list)
 
-        self.__testTime(self.itertoolsPermutations)
-        self.__testTime(self.recursionPermutations)
-        self.__testTime(self.recursionHeapsPermutation)
-        self.__testTime(self.recursionBacktrackingPermutation)
-        self.__testTime(self.lexicoGraphicPermutation)
-    
+        self.word = list(word)
 
-    def itertoolsPermutations(self, word=word):
-        perms = [''.join(x) for x in permutations(word)]
-        return len(perms)
+        print(self.itertoolsPermutations(self.word))
+        print(self.recursionPermutations(self.word))
+        print(self.recursionHeapsPermutation(len(self.word), self.word))
+        print(self.recursionBacktrackingPermutation(len(self.word), self.word))
+        print(self.lexicoGraphicPermutation(self.word))
 
-    def recursionPermutations(self, word=word ,step=0):
-        try:
-            if step==len(word):
-                self.container.append(''.join(word))
+    def __testTime(func):
+        
+        def inside_wrapper(self, *args, **kwargs):
+            start_time = time()
+            func(self, *args, **kwargs)
+            word_len = len(self.container[func.__name__])
+            end_time = time()
 
-            for i in range(step, len(word)):
-                string_copy = word
-                string_copy[step], string_copy[i] = string_copy[i], string_copy[step]
+            return (f'Algorithm: {func.__name__} \n time: {(end_time-start_time):.8f} \n nr of permutations: {word_len}')
+        return inside_wrapper
 
-                self.recursionPermutations(string_copy, step+1)
-        except:
-            pass
+    @__testTime
+    def itertoolsPermutations(self, word: list):
+        # result = [''.join(x) for x in permutations(word)]
+        for x in permutations(word):
+            self.container['itertoolsPermutations'].append(''.join(x))
+        
 
-        finally:
-            return len(self.container)
+    @__testTime
+    def recursionPermutations(self, word: list, step: int=0):
+        if step==len(word):
+            self.container['recursionPermutations'].append(''.join(word))
 
-    def recursionHeapsPermutation(self, size=len(word), word=word):
-        try:
-            if size==1:
-                self.container.append(''.join(word))
+        for i in range(step, len(word)):
+            string_copy = word
+            string_copy[step], string_copy[i] = string_copy[i], string_copy[step]
 
-            for i in range(size):
-                self.recursionHeapsPermutation(size-1, word=word)
-                if size & 1:
-                    word[0], word[size-1] = word[size-1], word[0]
-                else:
-                    word[i], word[size-1] = word[size-1], word[i]
-        except:
-            pass
+            self.recursionPermutations(string_copy, step+1)
 
-        finally:
-            return len(self.container)
+    @__testTime
+    def recursionHeapsPermutation(self, size: int, word: list):
+        if size==1:
+            self.container['recursionHeapsPermutation'].append(''.join(word))
 
-    def recursionBacktrackingPermutation(self, word=word, i=0, length=7):
-        try:
-            if i ==length:
-                self.container.append(''.join(word))
+        for i in range(size):
+            self.recursionHeapsPermutation(size-1, word=word)
+            if size & 1:
+                word[0], word[size-1] = word[size-1], word[0]
             else:
-                for x in range(i, length):
-                    word[i], word[x] = word[x], word[i]
-                    self.recursionBacktrackingPermutation(word, i+1, length)
-                    word[i], word[x] = word[x], word[i]
-        except:
-            pass
+                word[i], word[size-1] = word[size-1], word[i]
 
-        finally:
-            return len(self.container)     
+    @__testTime
+    def recursionBacktrackingPermutation(self, length: int, word: list, i: int=0):
+        if i ==length:
+            self.container['recursionBacktrackingPermutation'].append(''.join(word))
+        else:
+            for x in range(i, length):
+                word[i], word[x] = word[x], word[i]
+                self.recursionBacktrackingPermutation(length, word, i+1)
+                word[i], word[x] = word[x], word[i]
 
-    def __lexicographicPermutation(self, word: list=word):
+    def __lexicographicPermutation(self, word: list):
         a = sorted(word)
         n = len(a) - 1
         while True:
@@ -92,20 +93,12 @@ class BestPermutationAlgorithm():
             #4. Reverse the tail of the sequence
             a[j+1:] = a[j+1:][::-1]
 
-    def lexicoGraphicPermutation(self, word=word):
-        var = list(self.__lexicographicPermutation(word))
-        return len(var)
+    @__testTime
+    def lexicoGraphicPermutation(self, word: list):
+        result = list(self.__lexicographicPermutation(word))
+        for i in result:
+            self.container['lexicoGraphicPermutation'].append(i)
 
-
-    # Decorator
-    def __testTime(self, func):
-        start_time = time()
-        len = func()
-        end_time = time()
-        print(f'Algorithm: {func.__name__} \n time: {(end_time-start_time):.8f} \n nr of permutations: {len}')
-        self.container.clear()
-
-
-Object=BestPermutationAlgorithm()
+Object=BestPermutationAlgorithm('poiuytr')
 
 
